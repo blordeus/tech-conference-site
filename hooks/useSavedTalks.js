@@ -15,21 +15,17 @@ const STORAGE_KEY = 'tc_saved_talks';
  *   clearAll()  — wipe saved talks
  */
 export function useSavedTalks() {
-  const [savedIds, setSavedIds] = useState(new Set());
-  const [hydrated, setHydrated] = useState(false);
-
-  // Hydrate from localStorage after mount (avoids SSR mismatch)
-  useEffect(() => {
+  const [savedIds, setSavedIds] = useState(() => {
     try {
+      if (typeof window === 'undefined') return new Set();
       const stored = localStorage.getItem(STORAGE_KEY);
-      if (stored) {
-        setSavedIds(new Set(JSON.parse(stored)));
-      }
+      return stored ? new Set(JSON.parse(stored)) : new Set();
     } catch {
-      // corrupt storage — start fresh
+      return new Set();
     }
-    setHydrated(true);
-  }, []);
+  });
+
+  const [hydrated] = useState(true);
 
   // Persist to localStorage on every change
   useEffect(() => {

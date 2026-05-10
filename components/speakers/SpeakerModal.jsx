@@ -108,7 +108,7 @@ export default function SpeakerModal({ speaker, talk, isSaved, onToggleSave, onC
           {talk && (
             <>
               <p className="font-mono text-[12px] font-bold text-neutral-500 uppercase tracking-[0.5px] mb-[var(--spacing-200)]">
-                // Talk
+                {'// Talk'}
               </p>
               <TalkTicket
                 talk={talk}

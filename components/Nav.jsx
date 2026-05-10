@@ -16,7 +16,7 @@ export default function Nav() {
 
   return (
     <header className="border-b border-neutral-600 bg-neutral-900">
-      <div className="page-container flex items-center justify-between py-[var(--spacing-200)]">
+      <div className="flex items-center justify-between py-[var(--spacing-200)] px-[var(--page-padding)]">
         {/* Logo */}
         <Link
           href="/"
