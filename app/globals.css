@@ -1,26 +1,323 @@
 @import "tailwindcss";
 
+/* ─────────────────────────────────────────────
+   TAILWIND 4 THEME — DEVHORIZON_26
+   ───────────────────────────────────────────── */
+@theme {
+  --color-neutral-900: #00151D;
+  --color-neutral-800: #001A24;
+  --color-neutral-600: #33444A;
+  --color-neutral-500: #49616A;
+  --color-neutral-200: #C2C5C2;
+  --color-neutral-100: #FCEFE8;
+
+  --color-green-200:  #D1FF66;
+  --color-yellow-100: #FFE6BA;
+  --color-red-100:    #FEC9C3;
+  --color-red-300:    #FF8080;
+  --color-cyan-100:   #B5E9FC;
+  --color-purple-100: #CCC4FD;
+  --color-blue-100:   #BBD8FF;
+
+  --font-display: 'Chakra Petch', system-ui, sans-serif;
+  --font-mono:    'JetBrains Mono', monospace;
+
+  --radius-4:    4px;
+  --radius-6:    6px;
+  --radius-8:    8px;
+  --radius-10:   10px;
+  --radius-12:   12px;
+  --radius-16:   16px;
+  --radius-20:   20px;
+  --radius-24:   24px;
+  --radius-full: 999px;
+
+  --spacing-025:  2px;
+  --spacing-050:  4px;
+  --spacing-075:  6px;
+  --spacing-100:  8px;
+  --spacing-125:  10px;
+  --spacing-150:  12px;
+  --spacing-200:  16px;
+  --spacing-250:  20px;
+  --spacing-300:  24px;
+  --spacing-400:  32px;
+  --spacing-500:  40px;
+  --spacing-600:  48px;
+  --spacing-800:  64px;
+  --spacing-1000: 80px;
+  --spacing-1200: 96px;
+  --spacing-1400: 112px;
+  --spacing-1600: 128px;
+  --spacing-1800: 140px;
+}
+
+/* ─────────────────────────────────────────────
+   SEMANTIC ALIASES
+   ───────────────────────────────────────────── */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --color-bg:          var(--color-neutral-900);
+  --color-surface:     var(--color-neutral-800);
+  --color-surface-alt: var(--color-neutral-600);
+  --color-border:      var(--color-neutral-600);
+  --color-text:        var(--color-neutral-100);
+  --color-muted:       var(--color-neutral-200);
+  --color-primary:     var(--color-green-200);
+  --color-saved:       var(--color-yellow-100);
+
+  --page-padding: clamp(1rem, 5vw, 5rem);
+  --max-width: 1200px;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+/* ─────────────────────────────────────────────
+   BASE
+   ───────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
+html { scroll-behavior: smooth; }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-mono);
+  font-size: 14px;
+  line-height: 1.4;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+/* ─────────────────────────────────────────────
+   ACCESSIBILITY
+   ───────────────────────────────────────────── */
+:focus-visible {
+  outline: 2px dashed var(--color-primary);
+  outline-offset: 3px;
+}
+
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 1rem;
+  padding: var(--spacing-100) var(--spacing-200);
+  background: var(--color-primary);
+  color: var(--color-neutral-900);
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 14px;
+  z-index: 100;
+  transition: top 0.2s;
+}
+.skip-link:focus { top: 0; }
+
+/* ─────────────────────────────────────────────
+   LAYOUT
+   ───────────────────────────────────────────── */
+.page-container {
+  max-width: var(--max-width);
+  margin-inline: auto;
+  padding-inline: var(--page-padding);
+}
+
+/* ─────────────────────────────────────────────
+   BUTTONS
+   ───────────────────────────────────────────── */
+
+/*
+  Ghost / outline button
+  Default:  solid border, text color
+  Hover:    dark fill (neutral-900 bg), cream text — matches hover design
+*/
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-100);
+  padding: var(--spacing-150) var(--spacing-300);
+  background: transparent;
+  color: var(--color-text);
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 700;
+  border: 1px solid var(--color-border);
+  cursor: pointer;
+  transition: background 150ms ease, border-color 150ms ease, color 150ms ease;
+  text-decoration: none;
+}
+.btn-ghost:hover,
+.btn-ghost:focus-visible {
+  background: var(--color-neutral-900);
+  border-color: var(--color-neutral-100);
+  color: var(--color-neutral-100);
+  outline: none;
+}
+
+/*
+  Primary button (solid green)
+  Hover: slight opacity drop
+*/
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-100);
+  padding: var(--spacing-150) var(--spacing-300);
+  background: var(--color-primary);
+  color: var(--color-neutral-900);
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 700;
+  border: 1px solid var(--color-primary);
+  cursor: pointer;
+  transition: opacity 150ms ease, transform 100ms ease;
+  text-decoration: none;
+}
+.btn-primary:hover  { opacity: 0.85; }
+.btn-primary:active { transform: scale(0.97); }
+
+/* ─────────────────────────────────────────────
+   FILTER PILLS  (schedule page)
+   ───────────────────────────────────────────── */
+
+/*
+  Base pill — inactive
+  Hover: dashed green border + green text (matches hover design)
+*/
+.filter-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--spacing-075) var(--spacing-200);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border: 1px solid var(--color-border);
+  color: var(--color-muted);
+  background: transparent;
+  cursor: pointer;
+  transition: border-color 150ms ease, color 150ms ease, background 150ms ease;
+  white-space: nowrap;
+}
+.filter-pill:hover,
+.filter-pill:focus-visible {
+  border: 1px dashed var(--color-primary);
+  color: var(--color-primary);
+  outline: none;
+}
+
+/* Active pill — solid green bg, dark text */
+.filter-pill--active {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  border-style: solid;
+  color: var(--color-neutral-900);
+}
+.filter-pill--active:hover,
+.filter-pill--active:focus-visible {
+  background: var(--color-primary);
+  border: 1px solid var(--color-primary);
+  color: var(--color-neutral-900);
+}
+
+/* My Schedule pill — dashed green border by default */
+.filter-pill--saved {
+  border: 1px dashed var(--color-primary);
+  color: var(--color-primary);
+}
+.filter-pill--saved.filter-pill--active {
+  background: var(--color-primary);
+  border: 1px solid var(--color-primary);
+  color: var(--color-neutral-900);
+}
+
+/* Clear pill — dashed red border + red text */
+.filter-pill--clear {
+  border: 1px dashed var(--color-red-300);
+  color: var(--color-red-300);
+}
+.filter-pill--clear:hover,
+.filter-pill--clear:focus-visible {
+  background: var(--color-red-100);
+  border: 1px dashed var(--color-red-300);
+  color: var(--color-neutral-900);
+}
+
+/* ─────────────────────────────────────────────
+   BOOKMARK / STAR BUTTON
+   Used on TalkTicket and SpeakerModal
+   ───────────────────────────────────────────── */
+.btn-star {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  border: 2px solid var(--color-neutral-600);
+  background: var(--color-neutral-900);
+  color: var(--color-neutral-200);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  cursor: pointer;
+  transition: border-color 150ms ease, color 150ms ease, background 150ms ease;
+}
+.btn-star:hover,
+.btn-star:focus-visible {
+  border-color: var(--color-saved);
+  color: var(--color-saved);
+  outline: none;
+}
+/* Saved state — filled yellow star */
+.btn-star[aria-pressed='true'] {
+  border-color: var(--color-saved);
+  background: var(--color-saved);
+  color: var(--color-neutral-900);
+}
+
+/* ─────────────────────────────────────────────
+   NAV LINK
+   Desktop: solid border default, dashed green on hover
+   ───────────────────────────────────────────── */
+.nav-link {
+  display: block;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: var(--spacing-100) var(--spacing-200);
+  border: 1px solid var(--color-border);
+  color: var(--color-muted);
+  text-decoration: none;
+  transition: border-color 150ms ease, color 150ms ease, border-style 150ms ease;
+}
+.nav-link:hover,
+.nav-link:focus-visible {
+  border: 1px dashed var(--color-primary);
+  color: var(--color-primary);
+  outline: none;
+}
+.nav-link--active {
+  border: 1px solid var(--color-primary);
+  color: var(--color-neutral-100);
+}
+.nav-link--active:hover {
+  border: 1px solid var(--color-primary);
+  color: var(--color-neutral-100);
+}
+
+/* ─────────────────────────────────────────────
+   TRACK / SPEAKER CARD HOVER
+   Cards get a dashed green border on hover
+   ───────────────────────────────────────────── */
+.card-hoverable {
+  border: 1px solid var(--color-border);
+  transition: border-color 150ms ease, border-style 150ms ease;
+}
+.card-hoverable:hover,
+.card-hoverable:focus-visible {
+  border: 1px dashed var(--color-primary);
+  outline: none;
 }
