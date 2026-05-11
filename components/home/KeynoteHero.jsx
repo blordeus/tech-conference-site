@@ -60,8 +60,8 @@ export default function KeynoteHero({ conf, keynote }) {
           >
             {/* Left side — speaker info */}
             <div
-              className="flex flex-col justify-between z-10 flex-1"
-              style={{ padding: "var(--spacing-400)" }}
+              className="flex flex-col justify-evenly z-10 flex-1"
+              style={{ padding: "var(--spacing-300)" }}
             >
               <p
                 className="font-mono text-[12px] font-bold uppercase tracking-[0.5px]"
@@ -120,7 +120,7 @@ export default function KeynoteHero({ conf, keynote }) {
                   src={speaker.avatar}
                   alt={speaker.name}
                   fill
-                  className="object-cover object-center"
+                  className="object-fill object-center"
                   sizes="(max-width: 1024px) 50vw, 25vw"
                   priority
                 />
