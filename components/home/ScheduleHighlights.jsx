@@ -2,25 +2,19 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { getEnrichedHighlightedTalks } from '../../lib/data';
 import TalkTicket from '../shared/TalkTicket';
 
-export default function ScheduleHighlights() {
-  const talks = getEnrichedHighlightedTalks();
+export default function ScheduleHighlights({ talks = [] }) {
   const [expandedId, setExpandedId] = useState(null);
 
-  function toggle(id) {
-    setExpandedId((prev) => (prev === id ? null : id));
-  }
-
   return (
-    <section
-      className="py-[var(--spacing-600)]"
-      aria-labelledby="highlights-heading"
-    >
-      <div className="page-container">
-        <p className="font-mono text-[12px] font-bold text-neutral-500 uppercase tracking-[0.5px] mb-[var(--spacing-300)]">
-          // Schedule_Highlights
+    <section className="py-[var(--spacing-600)]" aria-labelledby="highlights-heading">
+      <div className="px-[var(--page-padding)]">
+        <p
+          id="highlights-heading"
+          className="font-mono text-[12px] font-bold text-[var(--color-primary)] uppercase tracking-[0.5px] mb-[var(--spacing-300)]"
+        >
+          {'// Schedule_Highlights'}
         </p>
 
         <ul className="space-y-[var(--spacing-150)] list-none m-0 p-0">
@@ -30,7 +24,7 @@ export default function ScheduleHighlights() {
                 talk={talk}
                 variant="highlight"
                 expanded={expandedId === talk.id}
-                onExpand={() => toggle(talk.id)}
+                onExpand={() => setExpandedId((prev) => prev === talk.id ? null : talk.id)}
               />
             </li>
           ))}

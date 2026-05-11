@@ -1,30 +1,20 @@
-'use client';
+"use client";
 
 /**
  * TalkTicket — shared ticket-style card
  * variant: 'schedule' | 'highlight' | 'modal'
  */
-export default function TalkTicket({
-  talk,
-  isSaved = false,
-  onToggle,
-  expanded = false,
-  onExpand,
-  variant = 'schedule',
-}) {
-  const trackColor = talk.track?.color ?? '#C2C5C2';
-  const trackName = talk.track?.name ?? '';
-  const contentId = `talk-desc-${talk.id}`;
 
-  const Barcode = () => (
-    <svg aria-hidden="true" width="56" height="36" viewBox="0 0 56 36">
-      {[2,4,7,9,13,15,17,21,23,26,29,31,35,37,40,42,46,48,51,53].map((x, i) => (
-        <rect key={i} x={x} y="0" width={i % 4 === 0 ? 2 : 1} height="36" fill="currentColor" />
-      ))}
-    </svg>
-  );
+const Barcode = () => (
+  <svg aria-hidden="true" width="56" height="36" viewBox="0 0 56 36">
+    {[2, 4, 7, 9, 13, 15, 17, 21, 23, 26, 29, 31, 35, 37, 40, 42, 46, 48, 51, 53].map((x, i) => (
+      <rect key={i} x={x} y="0" width={i % 4 === 0 ? 2 : 1} height="36" fill="currentColor" />
+    ))}
+  </svg>
+);
 
-  const StarBtn = () => (
+function StarBtn({ onToggle, isSaved, talk }) {
+  return (
     <button
       onClick={() => onToggle?.(talk.id)}
       aria-pressed={isSaved}
@@ -48,6 +38,19 @@ export default function TalkTicket({
       </svg>
     </button>
   );
+}
+
+export default function TalkTicket({
+  talk,
+  isSaved = false,
+  onToggle,
+  expanded = false,
+  onExpand,
+  variant = 'schedule',
+}) {
+  const trackColor = talk.track?.color ?? '#C2C5C2';
+  const trackName = talk.track?.name ?? '';
+  const contentId = `talk-desc-${talk.id}`;
 
   /* ── Modal variant ── */
   if (variant === 'modal') {
@@ -73,7 +76,7 @@ export default function TalkTicket({
             {talk.title}
           </h3>
           <p className="font-mono font-bold text-[12px] uppercase tracking-[0.5px] text-neutral-900">
-            {talk.speaker?.name} // {talk.speaker?.company}
+            {talk.speaker?.name}{' // '}{talk.speaker?.company}
           </p>
         </div>
 
@@ -89,7 +92,7 @@ export default function TalkTicket({
           <div className="text-neutral-500 my-[var(--spacing-100)]">
             <Barcode />
           </div>
-          {onToggle && <StarBtn />}
+          {onToggle && <StarBtn onToggle={onToggle} isSaved={isSaved} talk={talk} />}
         </div>
       </div>
     );
@@ -118,7 +121,7 @@ export default function TalkTicket({
           {talk.title}
         </h3>
         <p className="font-mono font-bold text-[12px] uppercase tracking-[0.5px] text-neutral-900 mt-[var(--spacing-100)]">
-          {talk.speaker?.name} // {talk.speaker?.company}
+          {talk.speaker?.name}{' // '}{talk.speaker?.company}
         </p>
 
         {/* Expand toggle */}
@@ -169,7 +172,7 @@ export default function TalkTicket({
           </p>
         )}
 
-        {variant === 'schedule' && onToggle && <StarBtn />}
+        {variant === 'schedule' && onToggle && <StarBtn onToggle={onToggle} isSaved={isSaved} talk={talk} />}
       </div>
     </article>
   );

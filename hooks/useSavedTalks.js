@@ -1,57 +1,63 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import { useSession } from 'next-auth/react';
 
-const STORAGE_KEY = 'tc_saved_talks';
-
-/**
- * Manages saved talks in localStorage.
- * Safe for SSR — reads storage only after mount.
- *
- * Returns:
- *   savedIds   — Set of saved talk IDs
- *   isSaved(id) — boolean
- *   toggleSave(id) — add or remove
- *   clearAll()  — wipe saved talks
- */
 export function useSavedTalks() {
+  const { data: session } = useSession();
   const [savedIds, setSavedIds] = useState(new Set());
   const [hydrated, setHydrated] = useState(false);
 
-  // Hydrate from localStorage after mount (avoids SSR mismatch)
+  // Load saved talks — from API if logged in, localStorage if not
   useEffect(() => {
-    try {
-      const stored = localStorage.getItem(STORAGE_KEY);
-      if (stored) {
-        setSavedIds(new Set(JSON.parse(stored)));
-      }
-    } catch {
-      // corrupt storage — start fresh
+    if (session) {
+      fetch('/api/saves')
+        .then((r) => r.json())
+        .then(({ savedIds: ids }) => {
+          setSavedIds(new Set(ids));
+          setHydrated(true);
+        });
+    } else {
+      try {
+        const stored = localStorage.getItem('tc_saved_talks');
+        if (stored) setSavedIds(new Set(JSON.parse(stored)));
+      } catch {}
+      setHydrated(true);
     }
-    setHydrated(true);
-  }, []);
+  }, [session]);
 
-  // Persist to localStorage on every change
+  // Persist to localStorage when not logged in
   useEffect(() => {
-    if (!hydrated) return;
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(Array.from(savedIds)));
-  }, [savedIds, hydrated]);
+    if (!hydrated || session) return;
+    localStorage.setItem('tc_saved_talks', JSON.stringify(Array.from(savedIds)));
+  }, [savedIds, hydrated, session]);
 
-  const toggleSave = useCallback((id) => {
+  const toggleSave = useCallback(async (id) => {
+    const isSaved = savedIds.has(id);
+    // Optimistic update
     setSavedIds((prev) => {
       const next = new Set(prev);
-      if (next.has(id)) {
-        next.delete(id);
-      } else {
-        next.add(id);
-      }
+      isSaved ? next.delete(id) : next.add(id);
       return next;
     });
-  }, []);
+
+    if (session) {
+      await fetch('/api/saves', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ talkId: id, action: isSaved ? 'unsave' : 'save' }),
+      });
+    }
+  }, [savedIds, session]);
 
   const isSaved = useCallback((id) => savedIds.has(id), [savedIds]);
 
-  const clearAll = useCallback(() => setSavedIds(new Set()), []);
+  const clearAll = useCallback(async () => {
+    setSavedIds(new Set());
+    if (!session) {
+      localStorage.removeItem('tc_saved_talks');
+    }
+  }, [session]);
 
   return { savedIds, isSaved, toggleSave, clearAll, hydrated };
 }
