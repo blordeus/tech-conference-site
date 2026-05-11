@@ -1,5 +1,8 @@
 import './globals.css';
 import { Chakra_Petch, JetBrains_Mono } from 'next/font/google';
+import { getServerSession } from 'next-auth';
+import { authOptions } from './api/auth/[...nextauth]/route';
+import SessionProvider from '../components/SessionProvider.jsx';
 import Nav from '../components/Nav';
 import Footer from '../components/Footer';
 
@@ -22,14 +25,18 @@ export const metadata = {
   description: 'A three-day conference for engineers who build the interfaces humans use every day.',
 };
 
-export default function RootLayout({ children }) {
+export default async function RootLayout({ children }) {
+  const session = await getServerSession(authOptions);
+
   return (
     <html lang="en" className={`${chakraPetch.variable} ${jetbrainsMono.variable}`}>
       <body>
-        <a href="#main" className="skip-link">Skip to main content</a>
-        <Nav />
-        <main id="main">{children}</main>
-        <Footer />
+        <SessionProvider session={session}>
+          <a href="#main" className="skip-link">Skip to main content</a>
+          <Nav />
+          <main id="main">{children}</main>
+          <Footer />
+        </SessionProvider>
       </body>
     </html>
   );

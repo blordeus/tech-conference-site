@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
+import { useSession, signIn, signOut } from 'next-auth/react';
 
 const links = [
   { href: '/', label: 'Home' },
@@ -13,6 +14,7 @@ const links = [
 export default function Nav() {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { data: session } = useSession();
 
   return (
     <header className="border-b border-neutral-600 bg-neutral-900">
@@ -27,23 +29,43 @@ export default function Nav() {
         </Link>
 
         {/* Desktop nav */}
-        <nav aria-label="Primary navigation" className="hidden sm:block">
-          <ul className="flex gap-[var(--spacing-100)] list-none m-0 p-0">
-            {links.map(({ href, label }) => {
-              const active = pathname === href;
-              return (
-                <li key={href}>
-                  <Link
-                    href={href}
-                    aria-current={active ? 'page' : undefined}
-                    className={`nav-link ${active ? 'nav-link--active' : ''}`}
-                  >
-                    {label}
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
+        <nav aria-label="Primary navigation" className="hidden sm:flex items-center gap-[var(--spacing-100)]">
+          {links.map(({ href, label }) => {
+            const active = pathname === href;
+            return (
+              <Link
+                key={href}
+                href={href}
+                aria-current={active ? 'page' : undefined}
+                className={`nav-link ${active ? 'nav-link--active' : ''}`}
+              >
+                {label}
+              </Link>
+            );
+          })}
+
+          {/* Auth button */}
+          {session ? (
+            <div className="flex items-center gap-[var(--spacing-150)] ml-[var(--spacing-200)]">
+              <span className="font-mono text-[12px] text-neutral-500 uppercase tracking-[0.5px]">
+                {session.user.name}
+              </span>
+              <button
+                onClick={() => signOut()}
+                className="nav-link"
+              >
+                Sign Out
+              </button>
+            </div>
+          ) : (
+            <button
+              onClick={() => signIn('github')}
+              className="nav-link ml-[var(--spacing-200)]"
+              style={{ borderColor: 'var(--color-green-200)', color: 'var(--color-green-200)' }}
+            >
+              Sign In
+            </button>
+          )}
         </nav>
 
         {/* Mobile hamburger */}
@@ -87,6 +109,23 @@ export default function Nav() {
                 </li>
               );
             })}
+            <li>
+              {session ? (
+                <button
+                  onClick={() => signOut()}
+                  className="w-full text-left font-mono font-bold text-[12px] uppercase tracking-[0.5px] px-[var(--spacing-300)] py-[var(--spacing-200)] text-neutral-200 hover:text-green-200 transition-colors"
+                >
+                  Sign Out
+                </button>
+              ) : (
+                <button
+                  onClick={() => signIn('github')}
+                  className="w-full text-left font-mono font-bold text-[12px] uppercase tracking-[0.5px] px-[var(--spacing-300)] py-[var(--spacing-200)] text-green-200"
+                >
+                  Sign In
+                </button>
+              )}
+            </li>
           </ul>
         </nav>
       )}

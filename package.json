@@ -9,9 +9,12 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@auth/core": "^0.34.3",
+    "@neondatabase/serverless": "^1.1.0",
     "@sanity/image-url": "2",
     "@sanity/vision": "5",
     "next": "16.2.6",
+    "next-auth": "^4.24.14",
     "next-sanity": "^12.4.5",
     "react": "19.2.4",
     "react-dom": "19.2.4",
