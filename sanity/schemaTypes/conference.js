@@ -51,9 +51,9 @@ export default {
       name: 'state',
       title: 'State',
       type: 'string',
-    },
-  },
+    }
+  ],
   preview: {
-    select: { title: 'name', subtitle: 'tagline' },
-  },
+    select: { title: 'name', subtitle: 'tagline' }
+  }
 }

@@ -24,9 +24,9 @@ export default async function HomePage() {
     ]);
 
   // Enrich featured speakers with their talk + track color
-  const talkBySpeaker = Object.fromEntries(allTalks.map((t) => [t.speakerId, t]));
+  const talkBySpeaker = Object.fromEntries(allTalks.map((t: any) => [t.speakerId, t]));
   const enrichedSpeakers = await Promise.all(
-    featuredSpeakers.map(async (speaker) => {
+    featuredSpeakers.map(async (speaker: any) => {
       const talk = talkBySpeaker[speaker.id] ?? null;
       const track = talk ? await getTrackById(talk.trackId) : null;
       return { ...speaker, talk: talk ? { ...talk, track } : null };

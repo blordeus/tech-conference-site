@@ -25,10 +25,10 @@ export default {
       name: 'color',
       title: 'Color',
       type: 'string',
-      description: 'Hex color (e.g. #B5E9FC)',
-    },
-  },
+      description: 'Hex color (e.g. #B5E9FC)'
+    }
+  ],
   preview: {
-    select: { title: 'name', subtitle: 'trackId' },
-  },
+    select: { title: 'name', subtitle: 'trackId' }
+  }
 }

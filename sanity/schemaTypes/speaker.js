@@ -44,13 +44,13 @@ export default {
       type: 'boolean',
       description: 'Show on home page featured speakers section',
       initialValue: false,
-    },
-  },
+    }
+  ],
   preview: {
     select: {
       title: 'name',
       subtitle: 'company',
-      media: 'avatar',
-    },
-  },
+      media: 'avatar'
+    }
+  }
 }

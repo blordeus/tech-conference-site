@@ -65,19 +65,20 @@ export default {
       type: 'boolean',
       description: 'Show in schedule highlights on home page',
       initialValue: false,
-    },
-  },
+    }
+  ],
   preview: {
     select: {
       title: 'title',
       speaker: 'speaker.name',
-      day: 'day',
+      day: 'day'
     },
-    prepare({ title, speaker, day }) {
+    prepare(value) {
+      const { title, speaker, day } = value;
       return {
         title,
         subtitle: `Day ${day} — ${speaker ?? 'No speaker'}`,
       };
-    },
-  },
+    }
+  }
 }

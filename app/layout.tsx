@@ -1,4 +1,5 @@
 import './globals.css';
+import type { ReactNode } from 'react';
 import { Chakra_Petch, JetBrains_Mono } from 'next/font/google';
 import { getServerSession } from 'next-auth';
 import { authOptions } from './api/auth/[...nextauth]/route';
@@ -25,7 +26,7 @@ export const metadata = {
   description: 'A three-day conference for engineers who build the interfaces humans use every day.',
 };
 
-export default async function RootLayout({ children }) {
+export default async function RootLayout({ children }: { children: ReactNode }) {
   const session = await getServerSession(authOptions);
 
   return (
